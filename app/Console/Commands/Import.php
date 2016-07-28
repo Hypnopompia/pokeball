@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Pokeball;
 use App\Sighting;
 use Illuminate\Console\Command;
 
@@ -38,8 +39,13 @@ class Import extends Command
 	 */
 	public function handle()
 	{
-		$lat = "40.29287412278603";
-		$lon = "-111.71147346496582";
+		$pokeball = Pokeball::find(1);
+
+		// $lat = "40.29287412278603";
+		// $lon = "-111.71147346496582";
+
+		$lat = $pokeball->latitude;
+		$lon = $pokeball->longitude;
 
 		$scan = json_decode(file_get_contents('https://pokevision.com/map/scan/' . $lat . '/' . $lon), true);
 
