@@ -53,7 +53,6 @@ class PokeballController extends Controller
 		}
 
 		$pokeball->battery = $batt;
-		$pokeball->name = $name;
 		$pokeball->save();
 
 		return response()->json([ 'ok' => true, 'pokeball' => $pokeball ]);
