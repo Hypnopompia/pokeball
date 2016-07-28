@@ -20,4 +20,4 @@ Route::auth();
 Route::get('/home', 'HomeController@index');
 
 Route::get('/pokeball.list', 'PokeballController@listpokeballs');
-Route::post('/pokeball.update', 'PokeballController@update');
+Route::any('/pokeball.update', 'PokeballController@update');
