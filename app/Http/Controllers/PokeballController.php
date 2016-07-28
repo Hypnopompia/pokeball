@@ -23,7 +23,7 @@ class PokeballController extends Controller
 
 	public function update(Request $request) {
 		$validator = Validator::make($request->all(), [
-			'deviceid' => 'required',
+			'coreid' => 'required',
 			'data' => 'required',
 		]);
 
@@ -31,12 +31,13 @@ class PokeballController extends Controller
 			return response()->json(['ok' => false, 'errors' => $validator->errors() ]);
 		}
 
+		$deviceid = $request->coreid;
 		$data = explode(",", $request->data);
 		$lat = $data[0];
 		$lon = $data[1];
 		$batt = $data[2];
 
-		$pokeball = Pokeball::where('deviceid', $request->deviceid)->first();
+		$pokeball = Pokeball::where('deviceid', $deviceid)->first();
 
 		if (!$pokeball) {
 			$pokeball = new Pokeball;
