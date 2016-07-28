@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use Log;
+
 use App\Pokeball;
 use App\Sighting;
 use Illuminate\Console\Command;
@@ -63,9 +65,11 @@ class Import extends Command
 		}
 
 		if (!isset($pokevision)) {
-			echo "Pokevision doesn't seem to be working right now.\n";
+			Log::info("Pokevision doesn't seem to be working right now.");
 			return;
 		}
+
+		Log::info("There are " . count($pokevision['pokemon']) . " pokemon nearby.");
 
 		$imported = 0;
 		foreach ($pokevision['pokemon'] as $pokemon) {
@@ -73,6 +77,6 @@ class Import extends Command
 				$imported++;
 			}
 		}
-		echo "Imported " . $imported . " new sightings.\n";
+		Log::info("Imported " . $imported . " new sightings.");
 	}
 }
