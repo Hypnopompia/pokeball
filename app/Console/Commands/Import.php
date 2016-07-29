@@ -84,7 +84,7 @@ class Import extends Command
 				$distance = $sighting->distanceFrom($pokeball);
 				Log::info("New " . $sighting->pokemon->name . ' in ' . $distance . ' feet.');
 
-				if (Pokemon::find($pokemon['pokemonId'])->notify && $distance < 200) {
+				if (Pokemon::find($pokemon['pokemonId'])->notify && $distance < 500) {
 					$wiggle = true;
 				}
 				$imported++;
