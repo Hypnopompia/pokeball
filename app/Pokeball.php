@@ -38,5 +38,7 @@ class Pokeball extends Model {
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . config('app.particleApiKey')) );
 
 		$response = curl_exec( $ch );
+
+		Log::debug($response);
 	}
 }
