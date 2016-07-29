@@ -85,7 +85,7 @@ class Import extends Command
 		Log::info("Imported " . $imported . " new sightings.");
 
 		if ($wiggle) {
-
+			Log::info("Send wiggle.");
 		}
 
 	}
