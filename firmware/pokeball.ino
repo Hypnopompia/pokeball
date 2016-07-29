@@ -152,7 +152,7 @@ int batteryStatus(String command){
 }
 
 int wiggle(String command){
-	for (int i = 0; i <= 5; i++) {
+	for (int i = 0; i < 10; i++) {
 		delay(500);
 
 		digitalWrite(D7, HIGH);
@@ -164,7 +164,6 @@ int wiggle(String command){
 		delay(500);
 
 		myservo.write(90);
-		delay(1000);
 	}
 	return 1;
 }
