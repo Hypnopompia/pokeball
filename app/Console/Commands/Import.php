@@ -94,7 +94,7 @@ class Import extends Command
 		Log::info($imported . " new sightings.");
 
 		if ($wiggle) {
-			Log::info("New pokemon within " . $range . ". Go catch em!");
+			Log::info("New pokemon within " . $range . " feet. Go catch em!");
 			$pokeball->wiggle();
 		}
 
