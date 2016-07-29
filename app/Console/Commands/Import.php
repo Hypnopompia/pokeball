@@ -41,6 +41,7 @@ class Import extends Command
 	 */
 	public function handle()
 	{
+		$range = 200; // Feet
 		$pokeball = Pokeball::find(1);
 		if (!$pokeball) {
 			echo "Pokeball not found.\n";
@@ -84,7 +85,7 @@ class Import extends Command
 				$distance = $sighting->distanceFrom($pokeball);
 				Log::info("New " . $sighting->pokemon->name . ' in ' . $distance . ' feet.');
 
-				if (Pokemon::find($pokemon['pokemonId'])->notify && $distance < 200) {
+				if (Pokemon::find($pokemon['pokemonId'])->notify && $distance < $range) {
 					$wiggle = true;
 				}
 				$imported++;
@@ -93,6 +94,7 @@ class Import extends Command
 		Log::info($imported . " new sightings.");
 
 		if ($wiggle) {
+			Log::info("New pokemon within " . $range . ". Go catch em!");
 			$pokeball->wiggle();
 		}
 

@@ -25,7 +25,7 @@ class Pokeball extends Model {
 	];
 
 	public function wiggle() {
-		Log::info("Send wiggle.");
+		Log::info("Sending wiggle command.");
 
 		$url = "https://api.particle.io/v1/devices/" . $this->deviceid . "/wiggle";
 		$ch = curl_init( $url );
