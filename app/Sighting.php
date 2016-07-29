@@ -27,9 +27,34 @@ class Sighting extends Model
 		return $this->belongsTo('App\Pokemon');
 	}
 
-    public function scopeNotexpired($query) {
-        return $query->where('expires', '>', Carbon::now());
-    }
+	public function scopeNotexpired($query) {
+		return $query->where('expires', '>', Carbon::now());
+	}
+
+	public function distanceFrom(Pokeball $pokeball, $unit = 'F') {
+		$lat1 = $pokeball->latitude;
+		$lon1 = $pokeball->longitude;
+		$lat2 = $this->latitude;
+		$lon2 = $this->longitude;
+
+
+		$theta = $lon1 - $lon2;
+		$dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+		$dist = acos($dist);
+		$dist = rad2deg($dist);
+		$miles = $dist * 60 * 1.1515;
+		$unit = strtoupper($unit);
+
+		if ($unit == "K") {
+			return ($miles * 1.609344);
+		} else if ($unit == "N") {
+			return ($miles * 0.8684);
+		} else if ($unit == "F") {
+			return intval($miles * 5280);
+		} else {
+			return $miles;
+		}
+	}
 
 	public static function search($pokemon_id, $latitude, $longitude, $expires) {
 		return Sighting::where('pokemon_id', $pokemon_id)
@@ -44,7 +69,7 @@ class Sighting extends Model
 		$sighting = Sighting::search($pokemon_id, $latitude, $longitude, $expires);
 
 		if ($sighting) {
-			return false;
+			return ['new' => false, 'sighting' => $sighting];
 		}
 
 		$sighting = new Sighting;
@@ -55,6 +80,6 @@ class Sighting extends Model
 		$sighting->expires = Carbon::createFromTimestamp($expires);
 		$sighting->save();
 
-		return true;
+		return ['new' => true, 'sighting' => $sighting];
 	}
 }

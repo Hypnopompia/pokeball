@@ -206,4 +206,5 @@ return [
 
     ],
 
+    'particleApiKey' => env('PARTICLE_API_KEY', ''),
 ];

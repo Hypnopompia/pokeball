@@ -42,10 +42,12 @@ class Import extends Command
 	public function handle()
 	{
 		$pokeball = Pokeball::find(1);
-		Log::debug($pokeball);
+		if (!$pokeball) {
+			echo "Pokeball not found.\n";
+			return;
+		}
 
-		// $lat = "40.29287412278603";
-		// $lon = "-111.71147346496582";
+		// insert into pokeballs set deviceid='340056000c51343334363138', latitude='40.29287412278603', longitude='-111.71147346496582', battery=100;
 
 		$lat = $pokeball->latitude;
 		$lon = $pokeball->longitude;
@@ -75,17 +77,23 @@ class Import extends Command
 		$imported = 0;
 		$wiggle = false;
 		foreach ($pokevision['pokemon'] as $pokemon) {
-			if (Sighting::add($pokeball, $pokemon['pokemonId'], $pokemon['latitude'], $pokemon['longitude'], $pokemon['expiration_time'])) {
-				if (Pokemon::find($pokemon['pokemonId'])->notify) {
+			$add = Sighting::add($pokeball, $pokemon['pokemonId'], $pokemon['latitude'], $pokemon['longitude'], $pokemon['expiration_time']);
+			$sighting = $add['sighting'];
+
+			if ($add['new']) {
+				$distance = $sighting->distanceFrom($pokeball);
+				Log::info("New " . $sighting->pokemon->name . ' in ' . $distance . ' feet.');
+
+				if (Pokemon::find($pokemon['pokemonId'])->notify && $distance < 200) {
 					$wiggle = true;
 				}
 				$imported++;
 			}
 		}
-		Log::info("Imported " . $imported . " new sightings.");
+		Log::info($imported . " new sightings.");
 
 		if ($wiggle) {
-			Log::info("Send wiggle.");
+			$pokeball->wiggle();
 		}
 
 	}
