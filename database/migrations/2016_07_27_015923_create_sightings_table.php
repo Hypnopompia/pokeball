@@ -16,6 +16,7 @@ class CreateSightingsTable extends Migration
 			$table->increments('id');
 
 			$table->integer('pokemon_id');
+			$table->integer('pokeball_id');
 			$table->string('latitude');
 			$table->string('longitude');
 

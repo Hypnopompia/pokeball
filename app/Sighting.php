@@ -40,7 +40,7 @@ class Sighting extends Model
 			->first();
 	}
 
-	public static function add($pokemon_id, $latitude, $longitude, $expires) {
+	public static function add(Pokeball $pokeball, $pokemon_id, $latitude, $longitude, $expires) {
 		$sighting = Sighting::search($pokemon_id, $latitude, $longitude, $expires);
 
 		if ($sighting) {
@@ -49,6 +49,7 @@ class Sighting extends Model
 
 		$sighting = new Sighting;
 		$sighting->pokemon_id = $pokemon_id;
+		$sighting->pokeball_id = $pokeball->id;
 		$sighting->latitude = $latitude;
 		$sighting->longitude = $longitude;
 		$sighting->expires = Carbon::createFromTimestamp($expires);

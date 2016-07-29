@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use Log;
-
 use App\Pokeball;
+use App\Pokemon;
 use App\Sighting;
 use Illuminate\Console\Command;
+use Log;
 
 class Import extends Command
 {
@@ -42,6 +42,7 @@ class Import extends Command
 	public function handle()
 	{
 		$pokeball = Pokeball::find(1);
+		Log::debug($pokeball);
 
 		// $lat = "40.29287412278603";
 		// $lon = "-111.71147346496582";
@@ -72,11 +73,20 @@ class Import extends Command
 		Log::info("There are " . count($pokevision['pokemon']) . " pokemon nearby.");
 
 		$imported = 0;
+		$wiggle = false;
 		foreach ($pokevision['pokemon'] as $pokemon) {
-			if (Sighting::add($pokemon['pokemonId'], $pokemon['latitude'], $pokemon['longitude'], $pokemon['expiration_time'])) {
+			if (Sighting::add($pokeball, $pokemon['pokemonId'], $pokemon['latitude'], $pokemon['longitude'], $pokemon['expiration_time'])) {
+				if (Pokemon::find($pokemon['pokemonId'])->notify) {
+					$wiggle = true;
+				}
 				$imported++;
 			}
 		}
 		Log::info("Imported " . $imported . " new sightings.");
+
+		if ($wiggle) {
+
+		}
+
 	}
 }

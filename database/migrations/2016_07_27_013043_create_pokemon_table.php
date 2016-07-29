@@ -15,6 +15,7 @@ class CreatePokemonTable extends Migration
 		Schema::create('pokemon', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('name');
+			$table->boolean('notify')->default(true);
 
 			$table->softDeletes();
 			$table->nullableTimestamps();

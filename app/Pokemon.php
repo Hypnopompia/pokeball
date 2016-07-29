@@ -18,6 +18,7 @@ class Pokemon extends Model
 	protected $casts = [
 		'id' => 'integer',
 		'name' => 'string',
+		'notify' => 'boolean'
 	];
 
 	public function sightings() {
