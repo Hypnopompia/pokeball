@@ -41,60 +41,50 @@ class Import extends Command
 	 */
 	public function handle()
 	{
-		$range = 200; // Feet
 		$pokeball = Pokeball::find(1);
 		if (!$pokeball) {
 			echo "Pokeball not found.\n";
 			return;
 		}
 
-		// insert into pokeballs set deviceid='340056000c51343334363138', latitude='40.29287412278603', longitude='-111.71147346496582', battery=100;
-
 		$lat = $pokeball->latitude;
 		$lon = $pokeball->longitude;
 
-		$scan = json_decode(file_get_contents('https://pokevision.com/map/scan/' . $lat . '/' . $lon), true);
+		$command = "node /home/ubuntu/pogonode/pokemon.js " . $lat . " " . $lon;
+		// exec($command, $json, $return_var);
 
-		if ($scan && $scan['status'] == "success") {
-			$jobId = $scan['jobId'];
-			$jobComplete = false;
-			while (!$jobComplete) {
-				$json = file_get_contents('https://pokevision.com/map/data/' . $lat . '/' . $lon . "/" . $jobId);
-				$pokevision = json_decode($json, true);
-				if ($pokevision && isset($pokevision['pokemon'])) {
-					$jobComplete = true;
-				}
-				sleep(2);
-			}
-		}
+		$json = '[{"encounterId":"6394711798519346173","pokemon":{"id":58,"name":"Growlithe"},"latitude":40.38698761751936,"longitude":-111.82048104150228,"expires":1.171}]';
 
-		if (!isset($pokevision)) {
-			Log::info("Pokevision doesn't seem to be working right now.");
-			return;
-		}
 
-		Log::info("There are " . count($pokevision['pokemon']) . " pokemon nearby.");
-
+		$encounters = json_decode($json, true);
 		$imported = 0;
-		$wiggle = false;
-		foreach ($pokevision['pokemon'] as $pokemon) {
-			$add = Sighting::add($pokeball, $pokemon['pokemonId'], $pokemon['latitude'], $pokemon['longitude'], $pokemon['expiration_time']);
-			$sighting = $add['sighting'];
 
-			if ($add['new']) {
-				$distance = $sighting->distanceFrom($pokeball);
-				Log::info("New " . $sighting->pokemon->name . ' in ' . $distance . ' feet.');
+		if ($encounters) {
+			foreach ($encounters as $encounter) {
+				$sighting = Sighting::where('encounterid', $encounter['encounterId'])->first();
+				if (!$sighting) { // New sighting!
+					$sighting = new Sighting;
+					$sighting->encounterid = $encounter['encounterId'];
+					$sighting->pokemon_id = $encounter['pokemon']['id'];
+					$sighting->pokeball_id = $pokeball->id;
+					$sighting->latitude = $encounter['latitude'];
+					$sighting->longitude = $encounter['longitude'];
+					$sighting->expires = Carbon::createFromTimestamp(time() + intval($encounter['expires']));
+					$sighting->save();
 
-				if (Pokemon::find($pokemon['pokemonId'])->notify && $distance < $range) {
-					$wiggle = true;
+					$distance = $sighting->distanceFrom($pokeball);
+
+					Log::info("New " . $sighting->pokemon->name . ' in ' . $distance . ' feet.');
+
+					$imported++;
 				}
-				$imported++;
 			}
 		}
+
 		Log::info($imported . " new sightings.");
 
-		if ($wiggle) {
-			Log::info("New pokemon within " . $range . " feet. Go catch em!");
+		if ($imported > 0) {
+			Log::info("New pokemon found. Go catch em!");
 			$pokeball->wiggle();
 		}
 

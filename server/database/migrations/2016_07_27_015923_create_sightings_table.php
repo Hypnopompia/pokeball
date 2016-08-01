@@ -15,6 +15,7 @@ class CreateSightingsTable extends Migration
 		Schema::create('sightings', function (Blueprint $table) {
 			$table->increments('id');
 
+			$table->string('encounterid')->index();
 			$table->integer('pokemon_id');
 			$table->integer('pokeball_id');
 			$table->string('latitude');
