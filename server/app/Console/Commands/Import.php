@@ -60,7 +60,7 @@ class Import extends Command
 		$encounters = json_decode($json, true);
 		$imported = 0;
 
-		if (!is_array($encounters)) {
+		if (is_array($encounters)) {
 			foreach ($encounters as $encounter) {
 				$sighting = Sighting::where('encounterid', $encounter['encounterId'])->first();
 				if (!$sighting) { // New sighting!
