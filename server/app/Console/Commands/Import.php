@@ -7,6 +7,7 @@ use App\Pokemon;
 use App\Sighting;
 use Illuminate\Console\Command;
 use Log;
+use Carbon\Carbon;
 
 class Import extends Command
 {

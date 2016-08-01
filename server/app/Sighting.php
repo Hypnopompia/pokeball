@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -65,21 +64,4 @@ class Sighting extends Model
 			->first();
 	}
 
-	public static function add(Pokeball $pokeball, $pokemon_id, $latitude, $longitude, $expires) {
-		$sighting = Sighting::search($pokemon_id, $latitude, $longitude, $expires);
-
-		if ($sighting) {
-			return ['new' => false, 'sighting' => $sighting];
-		}
-
-		$sighting = new Sighting;
-		$sighting->pokemon_id = $pokemon_id;
-		$sighting->pokeball_id = $pokeball->id;
-		$sighting->latitude = $latitude;
-		$sighting->longitude = $longitude;
-		$sighting->expires = Carbon::createFromTimestamp($expires);
-		$sighting->save();
-
-		return ['new' => true, 'sighting' => $sighting];
-	}
 }
