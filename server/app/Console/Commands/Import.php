@@ -80,14 +80,18 @@ class Import extends Command
 					$imported++;
 				}
 			}
+
+			Log::info($imported . " new sightings.");
+
+			if ($imported > 0) {
+				Log::info("New pokemon found. Go catch em!");
+				$pokeball->wiggle();
+			}
+
+		} else {
+			Log::error("node script failed.");
 		}
 
-		Log::info($imported . " new sightings.");
-
-		if ($imported > 0) {
-			Log::info("New pokemon found. Go catch em!");
-			$pokeball->wiggle();
-		}
 
 	}
 }
