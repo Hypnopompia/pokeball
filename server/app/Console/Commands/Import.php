@@ -90,6 +90,7 @@ class Import extends Command
 
 		} else {
 			Log::error("node script failed.");
+			Log::debug($json);
 		}
 
 
