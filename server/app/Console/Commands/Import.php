@@ -51,7 +51,7 @@ class Import extends Command
 		$lat = $pokeball->latitude;
 		$lon = $pokeball->longitude;
 
-		$command = "node /home/ubuntu/pogonode/pokemon.js " . $lat . " " . $lon;
+		$command = "node /home/ubuntu/pogonode/pokemon.js " . $lat . " " . $lon . " 2>&1";
 		$json = shell_exec($command);
 
 		// $json = '[{"encounterId":"6394711798519346173","pokemon":{"id":58,"name":"Growlithe"},"latitude":40.38698761751936,"longitude":-111.82048104150228,"expires":1.171}]';
