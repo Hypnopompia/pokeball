@@ -55,7 +55,7 @@ class PokeballController extends Controller
 		$pokeball->battery = $batt;
 		$pokeball->save();
 
-		Log::info("Pokeball is at " . $pokeball->latitude . '/' . $pokeball->longitude . '. ' . $pokeball->battery . "% battery.");
+		Log::info("Pokeball is at " . floatval($lat) . '/' . floatval($lon) . '. ' . $pokeball->battery . "% battery.");
 
 		return response()->json([ 'ok' => true, 'pokeball' => $pokeball ]);
 	}
