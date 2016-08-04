@@ -44,11 +44,11 @@ class PokeballController extends Controller
 			$pokeball->deviceid = $deviceid;
 		}
 
-		if ($lat != 'null') {
+		if (floatval($lat) != 0) {
 			$pokeball->latitude = $lat;
 		}
 
-		if ($lon != 'null') {
+		if (floatval($lon) != 0) {
 			$pokeball->longitude = $lon;
 		}
 
