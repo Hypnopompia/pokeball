@@ -10,7 +10,7 @@
                 <div class="panel-body">
                     <p>
                         Location: {{ $pokeball->latitude }} / {{ $pokeball->longitude }}<br/>
-                        Updated: {{ $pokeball->updated_at }}
+                        Updated: {{ $pokeball->updated_at->setTimezone('MST')->toDateTimeString() }}
                     </p>
                 </div>
             </div>
