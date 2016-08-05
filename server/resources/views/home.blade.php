@@ -12,7 +12,7 @@
 						Location: {{ $pokeball->latitude }} / {{ $pokeball->longitude }}<br/>
 						Updated: {{ $pokeball->updated_at->setTimezone('MST')->toDateTimeString() }}
 					</p>
-					<div id="map" height="600"></div>
+					<div id="map" style="height: 600px;"></div>
 				</div>
 			</div>
 		</div>
