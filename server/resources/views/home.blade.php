@@ -8,7 +8,10 @@
                 <div class="panel-heading">Dashboard</div>
 
                 <div class="panel-body">
-                    You are logged in!
+                    <p>
+                        Location: {{ $pokeball->latitude }} / {{ $pokeball->longitude }}<br/>
+                        Updated: {{ $pokeball->updated_at }}
+                    </p>
                 </div>
             </div>
         </div>
