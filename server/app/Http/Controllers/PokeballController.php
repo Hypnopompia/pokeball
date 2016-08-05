@@ -59,4 +59,9 @@ class PokeballController extends Controller
 
 		return response()->json([ 'ok' => true, 'pokeball' => $pokeball ]);
 	}
+
+    public function wiggle() {
+    	Pokeball::find(1)->wiggle();
+    	return ":D";
+    }
 }
