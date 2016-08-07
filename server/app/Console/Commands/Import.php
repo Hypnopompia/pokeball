@@ -51,6 +51,10 @@ class Import extends Command
 		$lat = $pokeball->latitude;
 		$lon = $pokeball->longitude;
 
+		if ($lat == 0 || $lon == 0) {
+			return; // Don't know where the pokeball is
+		}
+
 		$command = "node /home/ubuntu/pogonode/pokemon.js " . $lat . " " . $lon . " 2>&1";
 		$json = shell_exec($command);
 

@@ -33,8 +33,8 @@ class PokeballController extends Controller
 
 		$deviceid = $request->coreid;
 		$data = explode(",", $request->data);
-		$lat = $data[0];
-		$lon = $data[1];
+		$lat = floatval($data[0]);
+		$lon = floatval($data[1]);
 		$batt = $data[2];
 
 		$pokeball = Pokeball::where('deviceid', $deviceid)->first();
@@ -44,18 +44,18 @@ class PokeballController extends Controller
 			$pokeball->deviceid = $deviceid;
 		}
 
-		if (floatval($lat) != 0) {
+		if ($lat != 0) {
 			$pokeball->latitude = $lat;
 		}
 
-		if (floatval($lon) != 0) {
+		if ($lon != 0) {
 			$pokeball->longitude = $lon;
 		}
 
 		$pokeball->battery = $batt;
 		$pokeball->save();
 
-		Log::info("Pokeball is at " . floatval($lat) . '/' . floatval($lon) . '. ' . $pokeball->battery . "% battery.");
+		Log::info("Pokeball is at " . $lat . '/' . $lon . '. ' . $pokeball->battery . "% battery.");
 
 		return response()->json([ 'ok' => true, 'pokeball' => $pokeball ]);
 	}
