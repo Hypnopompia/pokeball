@@ -51,8 +51,10 @@ class Import extends Command
 		$lat = $pokeball->latitude;
 		$lon = $pokeball->longitude;
 
-		if ($lat == 0 || $lon == 0) {
-			return; // Don't know where the pokeball is
+		$tenMinutesAgo = Carbon::now()->subMinutes(10);
+
+		if ($lat == 0 || $lon == 0 || $pokeball->updated_at < $tenMinutesAgo) {
+			return; // Don't know where the pokeball is or it hasn't checked in for a while.
 		}
 
 		$command = "node /home/ubuntu/pogonode/pokemon.js " . $lat . " " . $lon . " 2>&1";
