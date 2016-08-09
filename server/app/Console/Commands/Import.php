@@ -48,6 +48,12 @@ class Import extends Command
 			return;
 		}
 
+		$tenMinutesAgo = Carbon::now()->subMinutes(10);
+
+		if ($pokeball->updated_at < $tenMinutesAgo) {
+			return;
+		}
+
 		$pokeball->scan();
 
 	}

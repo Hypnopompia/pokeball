@@ -25,9 +25,7 @@ class Pokeball extends Model {
 	];
 
 	public function scan() {
-		$tenMinutesAgo = Carbon::now()->subMinutes(10);
-
-		if ($this->latitude == 0 || $this->longitude == 0 || $this->updated_at < $tenMinutesAgo) {
+		if ($this->latitude == 0 || $this->longitude == 0) {
 			return; // Don't know where the pokeball is or it hasn't checked in for a while.
 		}
 
